@@ -1,0 +1,38 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@*https://mdbootstrap.com/img/new/fluid/city/018.jpg*@
+
+
+<header>
+    <style>
+        #intro {
+            background-image: url(https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80);
+            height: 100vh;
+            text-align: center;
+        }
+    </style>
+    <!-- Background image -->
+    <div id="intro" class="bg-image shadow-2-strong">
+        <div class="mask d-flex align-items-center h-100" >
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-xl-6 col-md-8">
+                        <form class="bg-white  rounded-5 shadow-5-strong p-5">
+                            <!-- Email input -->
+                            <div class="form-outline mb-4">
+                                <h2>Welcome To Asset Management Tool</h2>
+                                <h4>An Easy Way To Manage Tools</h4>
+                            </div>                         
+
+                            <!-- Submit button -->
+                            <a type="submit" href="@Url.Action("Index","Assets")" class="btn btn-primary btn-block">Explore Asset Manager</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Background image -->
+</header>
+

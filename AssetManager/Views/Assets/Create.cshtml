@@ -1,0 +1,109 @@
+﻿@model AssetManager.Models.Asset
+
+@{
+    ViewData["Title"] = "Create";
+}
+<script type="text/javascript">
+
+    function myFunction() {
+
+        $.get("/Assets/Convert", { Id: $('#CountryName').val() }, function (price) {
+
+
+            var y = price * $('#Price').val();
+
+            document.getElementById("LocalPrice").value = y;
+
+
+        });
+    }
+
+    function preview() {
+        frame.src = URL.createObjectURL(event.target.files[0]);
+    }
+
+    function filelink() {
+        var fullPath = document.getElementById('file-ip-1').value;
+        if (fullPath) {
+            var startIndex = (fullPath.indexOf('\\') >= 0 ? fullPath.lastIndexOf('\\') : fullPath.lastIndexOf('/'));
+            var filename = fullPath.substring(startIndex);
+            if (filename.indexOf('\\') === 0 || filename.indexOf('/') === 0) {
+                filename = filename.substring(1);
+
+            }
+            filename = "\\images\\" + filename;
+            
+            document.getElementById("link").value = filename;
+        }
+
+    }
+</script>
+
+<h1>Create Asset</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="AssetTypeId" class="control-label"></label>
+                <select asp-for="AssetTypeId" class ="form-control" asp-items="ViewBag.AssetTypeId"></select>
+                <span asp-validation-for="AssetTypeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BrandId" class="control-label"></label>
+                <select asp-for="BrandId" class ="form-control" asp-items="ViewBag.BrandId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Model" class="control-label"></label>
+                <input asp-for="Model" class="form-control" />
+                <span asp-validation-for="Model" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Pdate" class="control-label"></label>
+                <input asp-for="Pdate" class="form-control" />
+                <span asp-validation-for="Pdate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CountryId" class="control-label"></label>
+                <select asp-for="CountryId" id="CountryName" class="form-control" asp-items="ViewBag.CountryId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" onchange="myFunction()" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LPrice" class="control-label"></label>
+                <input asp-for="LPrice" id="LocalPrice" class="form-control" />
+                <span asp-validation-for="LPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserId" class="control-label"></label>
+                <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Image" class="control-label"></label>
+                <input type="file" asp-for="Image" class="form-control" id="file-ip-1" onchange="filelink()" oninput="pic.src=window.URL.createObjectURL(this.files[0])" />
+                <img id="pic" width="300px" height="auto" />
+                <span asp-validation-for="Image" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImageFile" class="control-label"></label>
+                <input asp-for="ImageFile" class="form-control" id="link" />
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+                <a class="btn btn-primary" asp-action="Index">Back to List</a>
+            </div>
+            
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

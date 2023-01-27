@@ -1,0 +1,283 @@
+﻿@model IEnumerable<AssetManager.Models.Asset>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Asset Management Tool</h1>
+
+
+<table>
+    <tr>
+        <td>
+            <form class="input-group" asp-action="Index" method="get">
+                <button class="btn btn-outline-secondary" type="button" name="id" disabled>Asset Type</button>
+                <select class="form-select" type="text" name="id" asp-items="ViewBag.AssetTypeId"></select>
+                <input type="submit" value="Filter" class="btn btn-outline-secondary" />
+            </form>
+        </td>
+        <td>
+            <form class="input-group" asp-action="Index" method="get">
+                <button class="btn btn-outline-secondary" type="button" name="id" disabled>Brand</button>
+                <select class="form-select" type="text" name="BId" asp-items="ViewBag.BrandId"></select>
+                <input type="submit" value="Filter" class="btn btn-outline-secondary" />
+            </form>
+        </td>
+        <td>
+            <form class="input-group" asp-action="Index" method="get">
+                <button class="btn btn-outline-secondary" type="button" name="CId" disabled>Country</button>
+                <select class="form-select" type="text" name="CId" asp-items="ViewBag.CountryId"></select>
+                <input type="submit" value="Filter" class="btn btn-outline-secondary" />
+            </form>
+        </td>
+
+        <td>
+            <form asp-action="Index">
+
+                <input type="submit" value="Actual List" class="btn btn-outline-secondary" />
+                <a class="btn btn-primary" asp-action="Create">Create New</a>
+            </form>
+        </td>
+        <td><button class="btn btn btn-danger" type="button"> Asset Expired</button></td>
+        <td> <button class="btn btn-warning" type="button"> 3 Months to Expire </button></td>
+        <td> <button class="btn btn-info" type="button"> 6 Months to Expire </button></td>
+    </tr>
+</table>
+<table class="table">
+    <thead class="table-dark">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.AssetType)<a asp-action="Index" asp-route-sortOrder="@ViewData["TypeSort"]">[Sort]</a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Brand)<a asp-action="Index" asp-route-sortOrder="@ViewData["BrandSort"]">[Sort]</a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Model)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Pdate)<a asp-action="Index" asp-route-sortOrder="@ViewData["DateSort"]">[Sort]</a>
+            </th>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Country)<a asp-action="Index" asp-route-sortOrder="@ViewData["CountrySort"]">[Sort]</a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)<a asp-action="Index" asp-route-sortOrder="@ViewData["PriceSort"]">[Sort]</a>
+            </th>
+            <td>
+                @Html.DisplayNameFor(model => model.LPrice)
+            </td>
+            <th>
+                @Html.DisplayNameFor(model => model.LPrice)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.ImageFile)
+            </th>
+            <th>
+                Asset Owner<a asp-action="Index" asp-route-sortOrder="@ViewData["OwnerSort"]">[Sort]</a>
+            </th>
+
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            var y = (DateTime.Now).Year - item.Pdate.Year;
+            var m = (DateTime.Now).Month - item.Pdate.Month;
+            var TM = m + (y * 12);// Checking for asset expirt date
+            if (TM > 36)//Expired asset
+            {
+                <tr class="bg-danger">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AssetType.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Brand.Name)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Model)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Pdate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Country.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Country.Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LPrice)
+                    </td>
+                    <td>
+                        <img src="@item.ImageFile" height="100px" width="auto" />
+                        @*@Html.DisplayFor(modelItem => item.ImageFile)*@
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ApplicationUser.FirstName) @Html.DisplayFor(modelItem => item.ApplicationUser.LastName)
+                    </td>
+                    <td>
+                        
+                        <a class="btn btn-primary" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                        @if ((User.IsInRole("Admin")) || (User.IsInRole("User")))
+                        {
+                            <a class="btn btn-secondary" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                            <a class="btn btn-dark" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        }
+                    </td>
+                </tr>
+            }
+            else if (TM <= 36 && TM > 33)//Expired asset
+            {
+                <tr class="bg-warning">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AssetType.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Brand.Name)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Model)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Pdate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Country.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Country.Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LPrice)
+                    </td>
+                    <td>
+                        <img src="@item.ImageFile" height="100px" width="auto" />
+                        @*@Html.DisplayFor(modelItem => item.ImageFile)*@
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ApplicationUser.FirstName) @Html.DisplayFor(modelItem => item.ApplicationUser.LastName)
+                    </td>
+                    <td>
+                        
+                        <a class="btn btn-primary" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                        @if ((User.IsInRole("Admin")) || (User.IsInRole("User")))
+                        {
+                            <a class="btn btn-secondary" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                            <a class="btn btn-dark" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        }
+                    </td>
+                </tr>
+            }
+            else if (TM >= 30 && TM < 34)//Expired asset
+            {
+                <tr class="bg-info">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AssetType.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Brand.Name)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Model)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Pdate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Country.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Country.Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LPrice)
+                    </td>
+                    <td>
+                        <img src="@item.ImageFile" height="100px" width="auto" />
+                        @*@Html.DisplayFor(modelItem => item.ImageFile)*@
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ApplicationUser.FirstName) @Html.DisplayFor(modelItem => item.ApplicationUser.LastName)
+                    </td>
+                    <td>
+                        
+                        <a class="btn btn-primary" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                        @if ((User.IsInRole("Admin")) || (User.IsInRole("User")))
+                        {
+                                        <a class="btn btn-secondary" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                            <a class="btn btn-dark" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        }
+                    </td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AssetType.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Brand.Name)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Model)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Pdate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Country.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Country.Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LPrice)
+                    </td>
+                    <td>
+                        <img src="@item.ImageFile" height="100px" width="auto" />
+                        @*@Html.DisplayFor(modelItem => item.ImageFile)*@
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ApplicationUser.FirstName) @Html.DisplayFor(modelItem => item.ApplicationUser.LastName)
+                    </td>
+                    <td>
+                       
+                        <a class="btn btn-primary" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                        @if ((User.IsInRole("Admin")) || (User.IsInRole("User")))
+                        {
+                            <a class="btn btn-secondary" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                            <a class="btn btn-dark" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
